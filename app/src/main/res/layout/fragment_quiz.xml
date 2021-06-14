@@ -71,10 +71,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textSize="22sp"
+                android:text="Est-ce qu'il travaille a Paris?"
                 app:layout_constraintEnd_toEndOf="@id/margin_end_guideline"
                 app:layout_constraintStart_toStartOf="@id/margin_start_guideline"
-                app:layout_constraintTop_toTopOf="@id/margin_top_guideline"
-                tools:text="Est-ce qu'il travaille a Paris?" />
+                app:layout_constraintTop_toTopOf="@id/margin_top_guideline" />
 
             <RadioGroup
                 android:id="@+id/radio_group"
@@ -88,32 +88,31 @@
                     android:id="@+id/option_one"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="Option 1" />
+                    android:text="Option 1" />
 
                 <RadioButton
                     android:id="@+id/option_two"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="Option 2" />
+                    android:text="Option 2" />
 
                 <RadioButton
                     android:id="@+id/option_three"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="Option 3" />
+                    android:text="Option 3" />
 
                 <RadioButton
                     android:id="@+id/option_four"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:checked="true"
-                    tools:text="Option 4" />
+                    android:text="Option 4" />
 
                 <RadioButton
                     android:id="@+id/option_five"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="Option 5" />
+                    android:text="Option 5" />
 
             </RadioGroup>
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -124,7 +123,7 @@
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:text="Previous"
+        android:text="@string/previous_btn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -133,7 +132,7 @@
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:text="Next"
+        android:text="@string/next_btn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
