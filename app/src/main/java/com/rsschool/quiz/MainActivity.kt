@@ -11,8 +11,9 @@ class MainActivity : AppCompatActivity(), QuizFragment.Navigator {
     private val questionList:ArrayList<Question> = Quiz.getQuestions()
     private var currentPosition = 1
     private var selectedOptionPosition = 0
-    private var fragments: ArrayList<Fragment> = ArrayList()
+    private val fragments: ArrayList<Fragment> = ArrayList()
     private var currentNumberOfQuestion = 1
+    private val scoreList = MutableList(questionList.size) { _ -> 0 }
 
     private val currentFragment: Fragment?
         get() = supportFragmentManager.findFragmentById(R.id.container)
@@ -109,15 +110,22 @@ class MainActivity : AppCompatActivity(), QuizFragment.Navigator {
     }
 
     override fun chooseAnswer(numberOfAnswer: Int) {
-        val question = questionList[currentNumberOfQuestion - 1]
+        val index = currentNumberOfQuestion - 1
+        val question = questionList[index]
+        var score: Int = 0
         if(question.correctAnswer == numberOfAnswer) {
-            Quiz.score += (1 / questionList.size) * 100
+            score = ((1.0 / questionList.size) * 100).toInt()
+            //Quiz.score += ((1.0 / questionList.size) * 100).toInt()
+
         }
-        //Toast.makeText(this, "Answer is $selectedOptionPosition", Toast.LENGTH_SHORT).show()
+        scoreList[index] = score
+
+        Quiz.score = scoreList.sum()
+        //Toast.makeText(this, "Answer is ${Quiz.score}", Toast.LENGTH_SHORT).show()
     }
 
     override fun submitQuiz() {
-        Toast.makeText(this, "SUB", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "SUB = ${Quiz.result}", Toast.LENGTH_SHORT).show()
 
     }
 

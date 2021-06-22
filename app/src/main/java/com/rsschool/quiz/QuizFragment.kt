@@ -76,7 +76,13 @@ class QuizFragment : Fragment() {
                     binding.nextButton.isEnabled = true
                 }
             }
-            Quiz.result.append(button.text)
+            Quiz.result
+                .append(requireArguments().getString(ARG_QUESTION))
+                .append("\n")
+                .append("Your answer: ")
+                .append(button.text)
+                .append("\n")
+                .append("\n")
         }
 
         val view = binding.root
