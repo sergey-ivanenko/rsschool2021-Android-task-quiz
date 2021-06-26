@@ -1,39 +1,78 @@
 package com.rsschool.quiz
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.rsschool.quiz.databinding.FragmentResultBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [ResultFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ResultFragment : Fragment() {
+
+    private var _binding: FragmentResultBinding? = null
+    private val binding: FragmentResultBinding get() = requireNotNull(_binding)
+
+    private var resultEvents: ResultEventListener? = null
+
+    interface ResultEventListener {
+        fun onShareImageClickListener()
+        fun onBackImageClickListener()
+        fun onCloseImageClickListener()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        resultEvents = context as ResultEventListener
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_result, container, false)
+
+        _binding = FragmentResultBinding.inflate(inflater, container, false)
+        binding.result.text = getString(R.string.result_text, requireArguments().getInt(ARG_SCORE))
+        binding.imageShare.setOnClickListener { sharedResult() }
+        binding.imageBack.setOnClickListener { restartQuiz() }
+        binding.imageClose.setOnClickListener { closeQuiz() }
+
+        return binding.root
+    }
+
+    private fun sharedResult() {
+        resultEvents?.onShareImageClickListener()
+    }
+
+    private fun restartQuiz() {
+        resultEvents?.onBackImageClickListener()
+    }
+
+    private fun closeQuiz() {
+        resultEvents?.onCloseImageClickListener()
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        resultEvents = null
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(score: Int, answers: String) =
             ResultFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putInt(ARG_SCORE, score)
+                    putString(ARG_ANSWERS, answers)
                 }
             }
+
+        private const val ARG_SCORE = "ARG_SCORE"
+        private const val ARG_ANSWERS = "ARG_ANSWERS"
     }
 }

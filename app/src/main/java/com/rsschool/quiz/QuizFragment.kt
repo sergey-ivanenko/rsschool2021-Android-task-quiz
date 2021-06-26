@@ -2,12 +2,10 @@ package com.rsschool.quiz
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.rsschool.quiz.databinding.FragmentQuizBinding
 
@@ -16,7 +14,7 @@ class QuizFragment : Fragment() {
     interface Navigator {
         fun goBack()
         fun launchNext()
-        fun chooseAnswer(numberOfAnswer: Int)
+        fun chooseAnswer(numberOfAnswer: Int, answer: String)
         fun submitQuiz()
     }
 
@@ -28,11 +26,9 @@ class QuizFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        navigator = context as Navigator?
-        /*if (activity !is QuizEventListener) {
-            throw IllegalArgumentException("Activity should implement QuizEventListener interface!")
-        }*/
-        //quizEventListener = activity as QuizEventListener
+        //requireActivity().window.statusBarColor = requireContext().getColor(R.color.light_green_100_dark)
+        //context?.theme?.applyStyle(R.style.Theme_Quiz, true)
+        navigator = context as Navigator
     }
 
     override fun onCreateView(
@@ -41,7 +37,6 @@ class QuizFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        //return inflater.inflate(R.layout.fragment_quiz, container, false)
         _binding = FragmentQuizBinding.inflate(inflater, container, false)
 
         binding.previousButton.isEnabled = false
@@ -60,12 +55,12 @@ class QuizFragment : Fragment() {
         binding.nextButton.setOnClickListener { onNextButtonClicked() }
         binding.previousButton.setOnClickListener { onPrevButtonClicked() }
         binding.toolbar.setNavigationOnClickListener { onPrevButtonClicked() }
+        if (getNumberOfQuestion() == 1) {
+            binding.toolbar.navigationIcon = null
+        }
         binding.radioGroup.setOnCheckedChangeListener { group, checkedId ->
             val button = group.findViewById<RadioButton>(checkedId)
-            /*Toast.makeText(context,
-                "CLICKED! id = ${group.indexOfChild(button)}",
-                Toast.LENGTH_SHORT).show()*/
-            navigator?.chooseAnswer(group.indexOfChild(button) + 1)
+
             when (getNumberOfQuestion()) {
                 1 -> {
                     binding.previousButton.isEnabled = false
@@ -76,39 +71,23 @@ class QuizFragment : Fragment() {
                     binding.nextButton.isEnabled = true
                 }
             }
-            Quiz.result
+            val answer = StringBuilder()
+                .append("${getNumberOfQuestion()}) ")
                 .append(requireArguments().getString(ARG_QUESTION))
                 .append("\n")
                 .append("Your answer: ")
                 .append(button.text)
-                .append("\n")
-                .append("\n")
+                .append("\n\n")
+            navigator?.chooseAnswer(group.indexOfChild(button) + 1, answer.toString())
         }
 
-        val view = binding.root
-        return view
+        return binding.root
     }
 
     private fun getNumberOfQuestion(): Int = requireArguments().getInt(ARG_ID)
 
     private fun onPrevButtonClicked() {
         navigator?.goBack()
-
-        Log.i("click", "CLICK")
-        /*if (parentFragmentManager.backStackEntryCount > 0) {
-            parentFragmentManager.fragments[getNumberOfQuestion()]
-        } else {
-            requireActivity().onBackPressed()
-        }*/
-
-        //val size = parentFragmentManager.fragments.size
-        //Toast.makeText(context, "SIZE = $size", Toast.LENGTH_SHORT).show()
-        /*requireActivity().onBackPressed()*/
-        /*if (parentFragmentManager.backStackEntryCount > 0) {
-            parentFragmentManager.popBackStack()
-        } else {
-            requireActivity().onBackPressed()
-        }*/
     }
 
     private fun onNextButtonClicked() {
@@ -116,18 +95,15 @@ class QuizFragment : Fragment() {
             "Next" -> navigator?.launchNext()
             "Submit" -> navigator?.submitQuiz()
         }
-
-
-        /*parentFragmentManager
-            .beginTransaction()
-            .replace(R.id.container, fragment)
-            .addToBackStack(null)
-            .commit()*/
     }
 
     override fun onDetach() {
         super.onDetach()
         navigator = null
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
 
