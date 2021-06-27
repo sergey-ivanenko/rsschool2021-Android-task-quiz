@@ -26,8 +26,6 @@ class QuizFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        //requireActivity().window.statusBarColor = requireContext().getColor(R.color.light_green_100_dark)
-        //context?.theme?.applyStyle(R.style.Theme_Quiz, true)
         navigator = context as Navigator
     }
 
@@ -132,9 +130,6 @@ class QuizFragment : Fragment() {
             val fragment = QuizFragment()
             fragment.arguments = args
 
-            /*val args = Bundle()
-            args.putInt(PREVIOUS_RESULT_KEY, previousResult)
-            fragment.arguments = args*/
             return fragment
         }
 

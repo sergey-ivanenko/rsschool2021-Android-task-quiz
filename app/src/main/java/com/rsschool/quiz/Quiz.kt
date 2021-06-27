@@ -3,7 +3,7 @@ package com.rsschool.quiz
 class Quiz {
 
     companion object {
-        var result: StringBuilder = StringBuilder().append("You result: %d %%\n\n")
+        val result: StringBuilder = StringBuilder().append("You result: %d %%\n\n")
         var score = 0
 
         @JvmStatic
